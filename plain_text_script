@@ -46,16 +46,16 @@ if (oldremovalStatus starts with "Remove old MDM profile and install new MDM pro
 	tell application "System Events"
 		tell application process "System Preferences"
 			set currentWindow to name of window 1
-			delay 1
-			click button "Profiles" of scroll area 1 of window "System Preferences"
 			delay 2
+			click button "Profiles" of scroll area 1 of window "System Preferences"
+			delay 3
 			
 			tell window "Profiles"
 				tell scroll area 2
 					repeat with aRow in row of table 1
 						if value of static text of UI element 1 of aRow starts with oldMDM then
 							select aRow
-							delay 1
+							delay 2
 						end if
 					end repeat
 				end tell
@@ -66,17 +66,18 @@ if (oldremovalStatus starts with "Remove old MDM profile and install new MDM pro
 	tell application "System Events"
 		click UI element 2 of group 1 of window "Profiles" of application process "System Preferences"
 	end tell
-	delay 4
+	delay 2
 	tell application "System Events"
 		click UI element "Remove" of sheet 1 of window "Profiles" of application process "System Preferences"
 	end tell
 	
 	tell application "System Events"
-		delay 1.5
+		delay 2
 		repeat until exists process "SecurityAgent"
-			delay 1.5
+			delay 2
 		end repeat
 		tell process "SecurityAgent"
+			set frontmost to true
 			if (adminChoice starts with "Current user is a non-admin") then
 				keystroke adminUsername
 				key code 48
@@ -90,6 +91,7 @@ if (oldremovalStatus starts with "Remove old MDM profile and install new MDM pro
 		quit
 	end tell
 end if
+
 delay 2
 -- This part opens the new enrollment profile and installs it
 -- Catalina method
@@ -98,7 +100,7 @@ if (osChoice starts with "macOS 10.15 Catalina and before") then
 		open file "Macintosh HD:Users:Shared:enrollmentProfile-SHCS.mobileconfig"
 	end tell
 	
-	delay 4
+	delay 5
 	
 	tell application "System Events"
 		tell application process "System Preferences"
@@ -107,7 +109,7 @@ if (osChoice starts with "macOS 10.15 Catalina and before") then
 			end tell
 		end tell
 	end tell
-	delay 4
+	delay 5
 	tell application "System Events"
 		tell application process "System Preferences"
 			tell window "Profiles"
@@ -115,7 +117,7 @@ if (osChoice starts with "macOS 10.15 Catalina and before") then
 			end tell
 		end tell
 	end tell
-	delay 8
+	delay 9
 	tell application "System Events"
 		tell application process "System Preferences"
 			tell window "Profiles"
@@ -135,9 +137,9 @@ if (osChoice starts with "macOS 11.0 Big Sur and later") then
 	tell application "System Events"
 		tell application process "System Preferences"
 			set currentWindow to name of window 1
-			delay 2
+			delay 3
 			click button "Profiles" of scroll area 1 of window "System Preferences"
-			delay 2
+			delay 3
 			
 			tell window "Profiles"
 				tell scroll area 2
@@ -149,9 +151,9 @@ if (osChoice starts with "macOS 11.0 Big Sur and later") then
 					end repeat
 				end tell
 				click button "Install…" of scroll area 1
-				delay 4
-				click button "Install" of sheet 1
 				delay 6
+				click button "Install" of sheet 1
+				delay 9
 				click button "Install" of sheet 1
 			end tell
 		end tell
@@ -159,11 +161,12 @@ if (osChoice starts with "macOS 11.0 Big Sur and later") then
 end if
 -- This part inputs password information to approve profile
 tell application "System Events"
-	delay 0.5
+	delay 2
 	repeat until exists process "SecurityAgent"
-		delay 0.5
+		delay 2
 	end repeat
 	tell process "SecurityAgent"
+		set frontmost to true
 		if (adminChoice starts with "Current user is a non-admin") then
 			keystroke adminUsername
 			key code 48
@@ -172,3 +175,5 @@ tell application "System Events"
 		key code 36
 	end tell
 end tell
+
+set appPass to ""
