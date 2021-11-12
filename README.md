@@ -1,11 +1,11 @@
 # mdm-enroller
 This AppleScript will remove an MDM enrollment profile and install a new one using GUI input. It asks a few questions
 
-If you use DEP and MDMs, good on you, this script is irrelevant to you. If you don't, Apple makes it really hard to remotely manage MDM enrollment profiles. Apple wants the end-user to be the one approving enrollment profiles or removing them. However, if you are a sys-admin managing a fleet of remotely laptops where end-users are not admins, this can be cumbersome to manage.
+If you use DEP and MDMs, good on you, this script is irrelevant to you. If you don't, Apple makes it really hard to remotely manage MDM enrollment profiles. Apple wants the end-user to be the one approving enrollment profiles or removing them. However, if you are a sys-admin managing a fleet of remote laptops where end-users are not admins, this can be cumbersome to manage.
 
-Often times, remote screen sharing tools like TeamViewer, RealVNC use profiles to approve keyboard/mouse input and screen sharing. When you remove an MDM enrollment profile, it will remove all profiles that came with it, you will lose screen access and won't be able to install the new MDM profile.
+Often times, remote screen sharing tools like TeamViewer, RealVNC use profiles to approve keyboard/mouse input and screen sharing. When you remove an MDM enrollment profile, it will remove all profiles that came with it, you will lose screen access and won't be able to install the new MDM profile. Then you will need physical access to complete the enrollment.
 
-This script gets around this problem.
+This script gets around this problem using good-ol' AppleScript
 
 REQUIREMENTS:
 1. You must give Accessibility permissions to Script Editor.app for this to work. Open System Preferences, go to Security & Privacy, then the Privacy Tab. Locate the Accessibility options and add Script Editor. It is located inside /Applications/Utilities/.
