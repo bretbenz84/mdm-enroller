@@ -1,0 +1,174 @@
+-- This script removes the old profile and installs the new one
+-- first it asks some information then acts upon it
+
+-- ask if removing old profile as well as installing new one
+set programOptions to {"Remove old MDM profile and install new MDM profile", "Only install new MDM profile"}
+set oldremovalStatus to (choose from list programOptions with title "Script Functions" with prompt "Choose the appropriate script")
+
+-- ask OS Version
+set osOptions to {"macOS 10.15 Catalina and before", "macOS 11.0 Big Sur and later"}
+set osChoice to (choose from list osOptions with title "Choose Which OS" with prompt "Choose the appropriate OS")
+
+--ask admin or not and capture passwords
+set adminOptions to {"Current user is an admin", "Current user is a non-admin"}
+set adminChoice to (choose from list adminOptions with title "Admin Users" with prompt "Choose the appropriate response")
+
+--capture admin username if current user is non admin
+if (adminOptions starts with "Current user is a non-admin") then
+	set adminUsername to ""
+	repeat until adminUsername is not ""
+		set adminUsername to text returned of (display dialog "Enter the exact admin username:" buttons {"Cancel", "OK"} default button 2 default answer "" with icon 1)
+	end repeat
+end if
+set appPass to text returned of (display dialog "Enter the admin password:" with title "Password Required" with icon stop default answer "" buttons {"Continue…"} default button 1 with hidden answer)
+
+--capture old MDM Profile Name if needed
+if (oldremovalStatus starts with "Remove old MDM profile and install new MDM profile") then
+	set oldMDM to ""
+	repeat until oldMDM is not ""
+		set oldMDM to text returned of (display dialog "Enter the exact name of the old MDM profile:" buttons {"Cancel", "OK"} default button 2 default answer "" with icon 1)
+	end repeat
+end if
+
+--capture new MDM Profile Name
+set newMDM to ""
+repeat until newMDM is not ""
+	set newMDM to text returned of (display dialog "Enter the exact name of the new MDM profile:" buttons {"Cancel", "OK"} default button 2 default answer "" with icon 1)
+end repeat
+
+--capture new MDM profile location
+set mdmEnrollmentFile to choose file with prompt "Please select the new enrollment profile:"
+
+-- This partopens system preferences and removes the profile which is the same for all OS types
+if (oldremovalStatus starts with "Remove old MDM profile and install new MDM profile") then
+	tell application "System Preferences" to activate
+	
+	tell application "System Events"
+		tell application process "System Preferences"
+			set currentWindow to name of window 1
+			delay 1
+			click button "Profiles" of scroll area 1 of window "System Preferences"
+			delay 2
+			
+			tell window "Profiles"
+				tell scroll area 2
+					repeat with aRow in row of table 1
+						if value of static text of UI element 1 of aRow starts with oldMDM then
+							select aRow
+							delay 1
+						end if
+					end repeat
+				end tell
+			end tell
+		end tell
+	end tell
+	
+	tell application "System Events"
+		click UI element 2 of group 1 of window "Profiles" of application process "System Preferences"
+	end tell
+	delay 4
+	tell application "System Events"
+		click UI element "Remove" of sheet 1 of window "Profiles" of application process "System Preferences"
+	end tell
+	
+	tell application "System Events"
+		delay 1.5
+		repeat until exists process "SecurityAgent"
+			delay 1.5
+		end repeat
+		tell process "SecurityAgent"
+			if (adminOptions starts with "Current user is a non-admin") then
+				keystroke adminUsername
+				key code 48
+			end if
+			keystroke appPass
+			key code 36
+		end tell
+	end tell
+	delay 17
+	tell application "System Preferences"
+		quit
+	end tell
+end if
+delay 2
+-- This part opens the new enrollment profile and installs it
+-- Catalina method
+if (osChoice starts with "macOS 10.15 Catalina and before") then
+	tell application "Finder"
+		open file "Macintosh HD:Users:Shared:enrollmentProfile-SHCS.mobileconfig"
+	end tell
+	
+	delay 4
+	
+	tell application "System Events"
+		tell application process "System Preferences"
+			tell window "Profiles"
+				click button "Continue" of sheet 1
+			end tell
+		end tell
+	end tell
+	delay 4
+	tell application "System Events"
+		tell application process "System Preferences"
+			tell window "Profiles"
+				click button "Install" of sheet 1
+			end tell
+		end tell
+	end tell
+	delay 8
+	tell application "System Events"
+		tell application process "System Preferences"
+			tell window "Profiles"
+				click button "Install" of sheet 1
+			end tell
+		end tell
+	end tell
+end if
+
+--Big Sur method
+if (osChoice starts with "macOS 11.0 Big Sur and later") then
+	tell application "Finder"
+		open file mdmEnrollmentFile
+	end tell
+	tell application "System Preferences" to activate
+	
+	tell application "System Events"
+		tell application process "System Preferences"
+			set currentWindow to name of window 1
+			delay 2
+			click button "Profiles" of scroll area 1 of window "System Preferences"
+			delay 2
+			
+			tell window "Profiles"
+				tell scroll area 2
+					repeat with aRow in row of table 1
+						if value of static text of UI element 1 of aRow starts with "MDM Profile" then
+							select aRow
+							delay 1
+						end if
+					end repeat
+				end tell
+				click button "Install…" of scroll area 1
+				delay 4
+				click button "Install" of sheet 1
+				delay 6
+				click button "Install" of sheet 1
+			end tell
+		end tell
+	end tell
+end if
+-- This part inputs password information to approve profile
+tell application "System Events"
+	delay 0.5
+	repeat until exists process "SecurityAgent"
+		delay 0.5
+	end repeat
+	tell process "SecurityAgent"
+		if (adminOptions starts with "Current user is a non-admin") then
+			keystroke adminUsername
+			key code 48
+		end if
+		keystroke appPass
+		key code 36
+	end tell
+end tell
