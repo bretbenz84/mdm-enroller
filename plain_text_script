@@ -97,7 +97,7 @@ delay 2
 -- Catalina method
 if (osChoice starts with "macOS 10.15 Catalina and before") then
 	tell application "Finder"
-		open file "Macintosh HD:Users:Shared:enrollmentProfile-SHCS.mobileconfig"
+		open file mdmEnrollmentFile
 	end tell
 	
 	delay 5
