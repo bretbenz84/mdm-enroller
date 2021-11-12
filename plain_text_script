@@ -133,7 +133,7 @@ if (osChoice starts with "macOS 11.0 Big Sur and later") then
 		open file mdmEnrollmentFile
 	end tell
 	tell application "System Preferences" to activate
-	
+	delay 5
 	tell application "System Events"
 		tell application process "System Preferences"
 			set currentWindow to name of window 1
@@ -175,5 +175,4 @@ tell application "System Events"
 		key code 36
 	end tell
 end tell
-
 set appPass to ""
