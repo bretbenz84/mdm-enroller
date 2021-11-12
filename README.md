@@ -17,3 +17,4 @@ REQUIREMENTS:
 Note: There is a 17 second delay after removing the old script before killing System Preferences and loading the new one. This is to allow systems time to remove profiles that were pushed from the old MDM profile.
 
 Testing: You may want to adjust the delays for older slower systems. If the script runs faster than the OS can keep up you will have failures. You have been warned.
+This script was tested to work on a Retina MacBook Pro from 2012, so it should work on anything later that has an SSD.
