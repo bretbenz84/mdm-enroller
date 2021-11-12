@@ -5,7 +5,7 @@ If you use DEP and MDMs, good on you, this script is irrelevant to you. If you d
 
 Often times, remote screen sharing tools like TeamViewer, RealVNC use profiles to approve keyboard/mouse input and screen sharing. When you remove an MDM enrollment profile, it will remove all profiles that came with it, you will lose screen access and won't be able to install the new MDM profile. Then you will need physical access to complete the enrollment.
 
-This script gets around this problem using good-ol' AppleScript
+This script gets around this problem using good-ol' AppleScript!
 
 REQUIREMENTS:
 1. You must give Accessibility permissions to Script Editor.app for this to work. Open System Preferences, go to Security & Privacy, then the Privacy Tab. Locate the Accessibility options and add Script Editor. It is located inside /Applications/Utilities/.
