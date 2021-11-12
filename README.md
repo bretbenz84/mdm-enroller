@@ -1,5 +1,5 @@
 # mdm-enroller
-This AppleScript will remove an MDM enrollment profile and install a new one using GUI input. It asks a few questions
+This AppleScript will remove an MDM enrollment profile and install a new one using GUI input. It asks a few questions before manipulating system events.
 
 If you use DEP and MDMs, good on you, this script is irrelevant to you. If you don't, Apple makes it really hard to remotely manage MDM enrollment profiles. Apple wants the end-user to be the one approving enrollment profiles or removing them. However, if you are a sys-admin managing a fleet of remote laptops where end-users are not admins, this can be cumbersome to manage.
 
