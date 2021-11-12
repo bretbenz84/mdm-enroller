@@ -14,7 +14,7 @@ set adminOptions to {"Current user is an admin", "Current user is a non-admin"}
 set adminChoice to (choose from list adminOptions with title "Admin Users" with prompt "Choose the appropriate response")
 
 --capture admin username if current user is non admin
-if (adminOptions starts with "Current user is a non-admin") then
+if (adminChoice starts with "Current user is a non-admin") then
 	set adminUsername to ""
 	repeat until adminUsername is not ""
 		set adminUsername to text returned of (display dialog "Enter the exact admin username:" buttons {"Cancel", "OK"} default button 2 default answer "" with icon 1)
@@ -77,7 +77,7 @@ if (oldremovalStatus starts with "Remove old MDM profile and install new MDM pro
 			delay 1.5
 		end repeat
 		tell process "SecurityAgent"
-			if (adminOptions starts with "Current user is a non-admin") then
+			if (adminChoice starts with "Current user is a non-admin") then
 				keystroke adminUsername
 				key code 48
 			end if
@@ -164,7 +164,7 @@ tell application "System Events"
 		delay 0.5
 	end repeat
 	tell process "SecurityAgent"
-		if (adminOptions starts with "Current user is a non-admin") then
+		if (adminChoice starts with "Current user is a non-admin") then
 			keystroke adminUsername
 			key code 48
 		end if
